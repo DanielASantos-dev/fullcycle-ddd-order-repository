@@ -1,0 +1,81 @@
+# Compiled output
+/dist
+/build
+/out
+/*.tsbuildinfo
+
+# Node modules
+/node_modules
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript configuration cache
+/.tscache
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Mac specific
+.DS_Store
+
+# VSCode specific
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Optional REPL history
+.node_repl_history
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Coverage directory
+/coverage
+
+# JetBrains IDEs (IntelliJ, WebStorm, etc.)
+.idea/
+
+# TypeScript declaration files
+*.d.ts
+
+# Parcel cache
+.cache
+
+# SvelteKit build directory
+/.svelte-kit
+
+# Firebase cache
+.firebase/
+
+# Storybook files
+.storybook-out
+
+# Next.js build output
+.next
+
+# Nuxt.js build output
+.nuxt
+
+# Angular build output
+.angular
+
+# VuePress build output
+.vuepress/dist
+
+# Yarn PnP files
+.pnp.*
