@@ -5,26 +5,26 @@ import CustomerModel from "./customer.model";
 import { TransactionInterface } from "../../../../domain/@shared/domain/transaction.interface";
 
 export default class CustomerRepository implements CustomerRepositoryInterface {
-
-  private transaction: TransactionInterface
+  private transaction: TransactionInterface | null = null;
 
   public setTransaction(transaction: TransactionInterface): void {
     this.transaction = transaction;
   }
 
   async create(entity: Customer): Promise<void> {
-    await CustomerModel.create({
-      id: entity.id,
-      name: entity.name,
-      street: entity.Address.street,
-      number: entity.Address.number,
-      zipcode: entity.Address.zip,
-      city: entity.Address.city,
-      active: entity.isActive(),
-      rewardPoints: entity.rewardPoints,
-    },
+    await CustomerModel.create(
       {
-        transaction: this.transaction.getTransaction()
+        id: entity.id,
+        name: entity.name,
+        street: entity.Address.street,
+        number: entity.Address.number,
+        zipcode: entity.Address.zip,
+        city: entity.Address.city,
+        active: entity.isActive(),
+        rewardPoints: entity.rewardPoints,
+      },
+      {
+        transaction: this.transaction?.getTransaction(), // Uso opcional da transação
       }
     );
   }
@@ -44,7 +44,7 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
         where: {
           id: entity.id,
         },
-        transaction: this.transaction.getTransaction()
+        transaction: this.transaction?.getTransaction(), // Uso opcional da transação
       }
     );
   }
@@ -53,11 +53,9 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
     let customerModel;
     try {
       customerModel = await CustomerModel.findOne({
-        where: {
-          id,
-        },
+        where: { id },
         rejectOnEmpty: true,
-        transaction: this.transaction.getTransaction()
+        transaction: this.transaction?.getTransaction(), // Uso opcional da transação
       });
     } catch (error) {
       throw new Error("Customer not found");
@@ -76,20 +74,20 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
 
   async findAll(): Promise<Customer[]> {
     const customerModels = await CustomerModel.findAll({
-      transaction: this.transaction.getTransaction()
+      transaction: this.transaction?.getTransaction(), // Uso opcional da transação
     });
 
-    const customers = customerModels.map((customerModels) => {
-      let customer = new Customer(customerModels.id, customerModels.name);
-      customer.addRewardPoints(customerModels.rewardPoints);
+    const customers = customerModels.map((customerModel) => {
+      let customer = new Customer(customerModel.id, customerModel.name);
+      customer.addRewardPoints(customerModel.rewardPoints);
       const address = new Address(
-        customerModels.street,
-        customerModels.number,
-        customerModels.zipcode,
-        customerModels.city
+        customerModel.street,
+        customerModel.number,
+        customerModel.zipcode,
+        customerModel.city
       );
       customer.changeAddress(address);
-      if (customerModels.active) {
+      if (customerModel.active) {
         customer.activate();
       }
       return customer;
